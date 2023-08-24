@@ -1,0 +1,19 @@
+version: 3
+
+tasks:
+  run-infra:
+    cmds:
+      - docker compose up
+
+  run-api:
+    cmds:
+      - cd cmd/api && go run .
+
+  run-processor:
+    cmds:
+      - cd cmd/processor && go run .
+
+  run:
+    deps:
+      - run-api
+      - run-processor

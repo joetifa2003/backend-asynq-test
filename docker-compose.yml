@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  cache:
+    image: redis:7.0-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass devpassword
+    volumes:
+      - cache:/data
+
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_DATABASE=confessions
+      - MYSQL_ROOT_PASSWORD=devpassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mysql:
+    driver: local
+  cache:
+    driver: local
